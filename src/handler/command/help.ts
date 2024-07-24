@@ -12,6 +12,20 @@ const help = async (message: Message) => {
         ✅ *!help*
         Melihat daftar perintah yang dapat dilakukan.
 
+        ✅ *!talk [pesan]*
+        Butuh teman bicara ? Yuk mari obrolkan hal random denganku.
+        Contoh: !talk Halo Alisya 👋
+
+        ✅ *!resetmemory* (Soon)
+        Reset memori percakapan untuk membuat topik pembicaraan yang baru.
+
+        ✅ *!stickerize*
+        Kirim sebuah gambar lalu beri pesan !stickerize untuk membuat sticker.
+
+        ✅ *!forward* [nomor] [pesan] (Soon)
+        Kirim pesan atau gambar ke seseorang melalui Alisya.
+        Contoh: !forward 628xxx Ada hadiah di tas kamu dari someone
+
         ✅ *!add [nomor]*
         Menambahkan nomor telepon ke dalam group.
         Contoh: !add 628xxx 628xxx
@@ -20,15 +34,8 @@ const help = async (message: Message) => {
         Mengeluarkan seseorang atau beberapa dari group.
         Contoh: !kick @sopo @jarwo
 
-        ✅ *!stickerize*
-        Kirim sebuah gambar dan beri pesan !stickerize untuk membuat sticker.
-
         ✅ *!tagsemua*
         Melakukan tagging ke seluruh anggota group.
-
-        ✅ *!talk [pesan]*
-        Butuh teman bicara ? Yuk mari obrolkan hal random denganku.
-        Contoh: !talk Halo Alisya 👋
     `))
 }
 

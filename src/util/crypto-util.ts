@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 function sha256KeyedHash(key: string, data: string): string {
     const hmac = crypto.createHmac('sha256', key);

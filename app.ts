@@ -1,20 +1,27 @@
 import qrcode from 'qrcode-terminal';
 import client from './src/worker/client';
-import messageHandler from './src/handler/messsage-handler';
+import messageHandler from './src/handler';
+import logger from './src/logger/pino';
+
+logger.info('Starting the application...');
 
 client.on('authenticated', () => {
-    console.log("Authenticated Using local session");
+    logger.info('Client authenticated using local session!');
 });
 
 client.on('qr', qr => {
+    logger.info('QR code received, scan it to authenticate');
     qrcode.generate(qr, { small: true });
 });
 
 client.on('ready', () => {
-    console.log('Client is ready!');
-    console.log('For run this app in the background,\nTry to learn using tmux and start it in Tmux Session');
+    logger.info('Client is ready!');
 });
 
 client.on('message', messageHandler);
+
+client.on('disconnected', () => {
+    logger.info('Client is disconnected!');
+});
 
 client.initialize();

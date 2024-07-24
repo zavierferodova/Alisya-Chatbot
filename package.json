@@ -2,6 +2,8 @@
   "scripts": {
     "start": "ts-node app.ts",
     "dev": "nodemon --exec ts-node app.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "migrate": "sequelize-cli db:migrate",
     "migrate:rollback": "sequelize-cli db:migrate:undo",
     "migrate:rollback:all": "sequelize-cli db:migrate:undo:all"
@@ -12,7 +14,10 @@
     "@types/qrcode-terminal": "^0.12.2",
     "@types/sequelize": "^4.28.20",
     "dotenv": "^16.4.5",
+    "eslint-config-standard": "^17.1.0",
     "langchain": "^0.2.10",
+    "pino": "^9.3.1",
+    "pino-pretty": "^11.2.1",
     "puppeteer": "^19.7.2",
     "qrcode-terminal": "^0.12.0",
     "sequelize": "^6.37.3",
@@ -20,9 +25,12 @@
     "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js#webpack-exodus"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.17.0",
+    "@typescript-eslint/parser": "^7.17.0",
+    "eslint": "^8.57.0",
     "nodemon": "^3.1.4",
     "sequelize-cli": "^6.6.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   }
 }

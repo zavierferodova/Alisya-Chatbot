@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChatGroq } from "@langchain/groq";
 import { ChatMessageHistory  } from 'langchain/memory';
 import { ChatPromptTemplate, HumanMessagePromptTemplate, MessagesPlaceholder  } from '@langchain/core/prompts'
@@ -5,7 +6,7 @@ import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages
 import { BufferWindowMemory } from "langchain/memory";
 import { ConversationChain } from "langchain/chains";
 import { removeIndentation } from "../util/string-util";
-import ChatMemory from "../models/chatmemory";
+import ChatMemory from "../model/chat-memory";
 import config from "../config";
 
 const groqApiKey = config.groqApiKey;

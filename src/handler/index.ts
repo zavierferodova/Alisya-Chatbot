@@ -1,5 +1,5 @@
 import { Message } from "whatsapp-web.js";
-import commandRegistration from "./command-registration";
+import commandRegistration from "./registration";
 
 const messageHandler = (message: Message) => {
     Object.values(commandRegistration).forEach((command) => {
@@ -11,7 +11,7 @@ const registerCommand = (
     command: string,
     message: Message,
     callback: (message: Message) => void) => {
-    let msgx = message.body.trim();
+    const msgx = message.body.trim();
     if (msgx.indexOf(command) == 0) {
         callback(message);
     }

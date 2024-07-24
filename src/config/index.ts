@@ -1,4 +1,5 @@
-require('dotenv').config()
+import dotenv from 'dotenv';
+dotenv.config();
 
 type ConfigType = {
     chiperKey: string,

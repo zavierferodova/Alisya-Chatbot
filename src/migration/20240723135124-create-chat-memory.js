@@ -1,10 +1,10 @@
-'use strict';
+'use strict'
 
 const { DataTypes } = require('sequelize')
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up (queryInterface, Sequelize) {
     await queryInterface.createTable('ChatMemories', {
       id: {
         type: DataTypes.STRING,
@@ -22,10 +22,10 @@ module.exports = {
       updatedAt: {
         type: DataTypes.DATE,
         allowNull: false
-      },
-    });
+      }
+    })
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('ChatMemories');
+  async down (queryInterface, Sequelize) {
+    await queryInterface.dropTable('ChatMemories')
   }
-};
+}

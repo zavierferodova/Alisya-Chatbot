@@ -1,9 +1,9 @@
 import { Message } from "whatsapp-web.js";
-import addToGroup from "./command/add-to-group";
+import addToGroup from "./command/add";
 import help from "./command/help";
-import kickFromGroup from "./command/kick-from-group";
+import kickFromGroup from "./command/kick";
 import stickerize from "./command/stickerize";
-import tagAll from "./command/tag-all";
+import tagAll from "./command/tagall";
 import talk from "./command/talk";
 
 type MessageCommand = {

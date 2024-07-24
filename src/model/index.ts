@@ -1,8 +1,9 @@
 'use strict';
 
-import { Sequelize, Model } from 'sequelize';
+import { Sequelize } from 'sequelize';
 import process from 'process';
 const env = process.env.NODE_ENV || 'development';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const config = require(__dirname + '/../config/database.js')[env];
 
 let sequelize: Sequelize;

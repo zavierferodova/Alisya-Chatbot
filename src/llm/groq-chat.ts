@@ -1,40 +1,40 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChatGroq } from "@langchain/groq";
-import { ChatMessageHistory  } from 'langchain/memory';
+import { ChatGroq } from "@langchain/groq"
+import { ChatMessageHistory  } from 'langchain/memory'
 import { ChatPromptTemplate, HumanMessagePromptTemplate, MessagesPlaceholder  } from '@langchain/core/prompts'
-import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { BufferWindowMemory } from "langchain/memory";
-import { ConversationChain } from "langchain/chains";
-import { removeIndentation } from "../util/string-util";
-import ChatMemory from "../model/chat-memory";
-import config from "../config";
+import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages"
+import { BufferWindowMemory } from "langchain/memory"
+import { ConversationChain } from "langchain/chains"
+import { removeIndentation } from "../util/string-util"
+import ChatMemory from "../model/chat-memory"
+import config from "../config"
 
-const groqApiKey = config.groqApiKey;
-const model = 'llama3-8b-8192';
+const groqApiKey = config.groqApiKey
+const model = 'llama3-8b-8192'
 
 const llm = new ChatGroq({
     apiKey: groqApiKey,
     modelName: model,
     temperature: 1.0
-});
+})
 
 const systemPrompt = removeIndentation(`
     Kamu adalah Alisya personal chat WhatsApp muslimah.
     Kamu berbicara dengan sopan serta ramah dengan bahasa tidak formal seperti kata "aku" dibandingkan "anda", 
     serta terkadang memberi emoji untuk menunjukkan emosi.
-`).replace("\n", "");
+`).replace("\n", "")
 
 const makeConversationChain = async (id: string) => {
-    const chatMemory = await ChatMemory.findByPk(id);
-    let chatHistory = new ChatMessageHistory();
+    const chatMemory = await ChatMemory.findByPk(id)
+    let chatHistory = new ChatMessageHistory()
 
     if (chatMemory) {
-        const history = JSON.parse(chatMemory.history);
+        const history = JSON.parse(chatMemory.history)
         chatHistory = new ChatMessageHistory(history.map((message: any) => {
             if (message.type === "ai") {
-                return new AIMessage(message.data.content);
+                return new AIMessage(message.data.content)
             } else {
-                return new HumanMessage(message.data.content);
+                return new HumanMessage(message.data.content)
             }
         }))
     }
@@ -59,15 +59,15 @@ const makeConversationChain = async (id: string) => {
         llm,
         prompt: prompt,
         memory: memory
-    });
+    })
 
-    return { chain, memory };
+    return { chain, memory }
 }
 
 const updateChatMemory = async (id: string, memory: BufferWindowMemory): Promise<boolean> => {
     try {
-        const messageHistory = await memory.chatHistory.getMessages();
-        const messageHistoryDict = messageHistory.map((message) => message.toDict());
+        const messageHistory = await memory.chatHistory.getMessages()
+        const messageHistoryDict = messageHistory.map((message) => message.toDict())
 
         const [chatMemory, created] = await ChatMemory.findOrCreate({ 
             where: {
@@ -79,23 +79,39 @@ const updateChatMemory = async (id: string, memory: BufferWindowMemory): Promise
         })
 
         if (!created) {
-            chatMemory.history = JSON.stringify(messageHistoryDict);
-            await chatMemory.save();
+            chatMemory.history = JSON.stringify(messageHistoryDict)
+            await chatMemory.save()
         }
 
-        return true;
+        return true
     } catch (error) {
-        return false;
+        return false
+    }
+}
+
+const resetChatMemory = async (id: string): Promise<boolean> => {
+    try {
+        const chatMemory = await ChatMemory.findByPk(id)
+        
+        if (chatMemory) {
+            await chatMemory.destroy()
+            return true
+        }
+    
+        return false
+    } catch (error) {
+        return false
     }
 }
 
 const responseUserMessage = async (id: string, message: string): Promise<string> => {
-    const { chain, memory } = await makeConversationChain(id);
+    const { chain, memory } = await makeConversationChain(id)
     const chainValue = await chain.call({ inputText: message })
-    updateChatMemory(id, memory);    
-    return chainValue.response;
+    updateChatMemory(id, memory)    
+    return chainValue.response
 }
 
 export {
-    responseUserMessage
+    responseUserMessage,
+    resetChatMemory
 }

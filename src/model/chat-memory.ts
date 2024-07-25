@@ -1,11 +1,11 @@
-import sequelize from ".";
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize";
+import sequelize from "."
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize"
 
 class ChatMemory extends Model<InferAttributes<ChatMemory>, InferCreationAttributes<ChatMemory>> {
-  declare id: CreationOptional<string>;
-  declare history: string;
-  declare updatedAt: CreationOptional<Date>;
-  declare createdAt: CreationOptional<Date>;
+  declare id: CreationOptional<string>
+  declare history: string
+  declare updatedAt: CreationOptional<Date>
+  declare createdAt: CreationOptional<Date>
 }
 
 ChatMemory.init({
@@ -29,6 +29,6 @@ ChatMemory.init({
 }, {
   sequelize,
   modelName: 'ChatMemory',
-});
+})
 
 export default ChatMemory

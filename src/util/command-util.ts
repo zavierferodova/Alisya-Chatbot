@@ -1,5 +1,5 @@
-import { Chat, GroupChat, Message } from "whatsapp-web.js";
-import client from "../worker/client";
+import { Chat, GroupChat, Message } from "whatsapp-web.js"
+import client from "../worker/client"
 
 interface CheckGroupInvocationOptions {
     autoReply?: boolean;
@@ -12,10 +12,10 @@ const filterGroupInvoked = (
         autoReply: true
     }) => {
     if (!chat.isGroup && options.autoReply) {
-        message.reply("Maaf, command ini hanya bisa digunakan di group chat 😢");
+        message.reply("Maaf, command ini hanya bisa digunakan di group chat 😢")
     }
 
-    return !chat.isGroup;
+    return !chat.isGroup
 }
 
 const filterAdminInvoked = (
@@ -27,22 +27,22 @@ const filterAdminInvoked = (
     const groupNotInvoked = filterGroupInvoked(chat, message)
 
     if (!groupNotInvoked) {
-        const groupChat = chat as GroupChat;
-        const botId = client.info.wid._serialized;
+        const groupChat = chat as GroupChat
+        const botId = client.info.wid._serialized
 
         for (const participant of groupChat.participants) {
             if (participant.id._serialized === botId && !participant.isAdmin) {
                 if (options.autoReply) {
-                    message.reply("Maaf, aku bukan Admin di group ini 😢");
+                    message.reply("Maaf, aku bukan Admin di group ini 😢")
                 }
-                return true;
+                return true
             }
         }
 
-        return false;
+        return false
     }
 
-    return true;
+    return true
 }
 
 export {

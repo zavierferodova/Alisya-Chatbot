@@ -1,5 +1,5 @@
-import { Message } from "whatsapp-web.js";
-import { removeIndentation } from "../../util/string-util";
+import { Message } from "whatsapp-web.js"
+import { removeIndentation } from "../../util/string-util"
 
 const help = async (message: Message) => {
     message.reply(removeIndentation(`
@@ -16,13 +16,13 @@ const help = async (message: Message) => {
         Butuh teman bicara ? Yuk mari obrolkan hal random denganku.
         Contoh: !talk Halo Alisya 👋
 
-        ✅ *!resetmemory* (Soon)
+        ✅ *!resetmemory*
         Reset memori percakapan untuk membuat topik pembicaraan yang baru.
 
         ✅ *!stickerize*
         Kirim sebuah gambar lalu beri pesan !stickerize untuk membuat sticker.
 
-        ✅ *!forward* [nomor] [pesan] (Soon)
+        ✅ *!forward* [nomor] [pesan]
         Kirim pesan atau gambar ke seseorang melalui Alisya.
         Contoh: !forward 628xxx Ada hadiah di tas kamu dari someone
 
@@ -39,4 +39,4 @@ const help = async (message: Message) => {
     `))
 }
 
-export default help;
+export default help

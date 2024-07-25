@@ -7,7 +7,7 @@ A friendly conversational chatbot named Alisya integrated with Large Language Mo
 2. Kick person from group chat.
 3. Make sticker from sent image media.
 4. Tagging all group participants.
-5. (Soon) Sending a message or image via bot to someone.
+5. Sending a message or media via bot to someone.
 6. Talking with bot using LLM.
 
 ### Setup

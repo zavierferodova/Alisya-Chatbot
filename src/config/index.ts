@@ -1,9 +1,9 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import dotenv from 'dotenv'
+dotenv.config()
 
 type ConfigType = {
-    chiperKey: string,
-    groqApiKey: string
+    chiperKey: string;
+    groqApiKey: string;
 }
 
 const config: ConfigType = {
@@ -11,4 +11,4 @@ const config: ConfigType = {
     groqApiKey: process.env.GROQ_API_KEY!
 }
 
-export default config;
+export default config

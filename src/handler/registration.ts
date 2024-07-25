@@ -1,10 +1,12 @@
-import { Message } from "whatsapp-web.js";
-import addToGroup from "./command/add";
-import help from "./command/help";
-import kickFromGroup from "./command/kick";
-import stickerize from "./command/stickerize";
-import tagAll from "./command/tagall";
-import talk from "./command/talk";
+import { Message } from "whatsapp-web.js"
+import addToGroup from "./command/add"
+import help from "./command/help"
+import kickFromGroup from "./command/kick"
+import stickerize from "./command/stickerize"
+import tagAll from "./command/tagall"
+import talk from "./command/talk"
+import forward from "./command/forward"
+import resetMemory from "./command/reset-memory"
 
 type MessageCommand = {
     prefix: string;
@@ -16,8 +18,10 @@ enum CommandKey {
     add = 'add',
     kick = 'kick',
     tagAll = 'tagAll',
+    forward = 'forward',
     stickerize = 'stickerize',
-    talk = 'talk'
+    talk = 'talk',
+    resetMemory = 'resetMemory'
 }
 
 const commandRegistration: Record<CommandKey, MessageCommand> = {
@@ -37,6 +41,10 @@ const commandRegistration: Record<CommandKey, MessageCommand> = {
         prefix: '!tagsemua',
         callback: tagAll
     },
+    forward: {
+        prefix: '!forward',
+        callback: forward,
+    },
     stickerize: {
         prefix: '!stickerize',
         callback: stickerize
@@ -44,8 +52,12 @@ const commandRegistration: Record<CommandKey, MessageCommand> = {
     talk: {
         prefix: '!talk',
         callback: talk
+    },
+    resetMemory: {
+        prefix: '!resetmemory',
+        callback: resetMemory
     }
 }
 
-export default commandRegistration;
+export default commandRegistration
 export type { MessageCommand, CommandKey }

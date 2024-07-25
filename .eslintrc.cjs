@@ -18,7 +18,9 @@ module.exports = {
             parserOptions: {
                 project: './tsconfig.json'
             },
-            rules: {}
+            rules: {
+                "@typescript-eslint/semi": ["error", "never"]
+            }
         },
         {
             files: ['*.js'],

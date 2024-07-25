@@ -23,7 +23,7 @@ A friendly conversational chatbot named Alisya integrated with Large Language Mo
    ```
    CHIPER_KEY=<your_custom_secret_key>
    GROQ_API_KEY=<your_groq_api_key>
-   DB_NAME=AlisyaDB.db
+   DB_NAME=BotDatabase.db
    ```
 4. Perform database migration to store chat conversation,
    ```bash

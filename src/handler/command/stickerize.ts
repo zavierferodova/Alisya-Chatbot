@@ -1,6 +1,7 @@
 import { Message, MessageMedia } from "whatsapp-web.js"
 import logger from "../../logger/pino"
 import { parseStackTrace } from "../../util/string-util"
+import botConfig from "../../config/bot-config"
 
 const stickerize = async (message: Message) => {
     try {
@@ -15,7 +16,7 @@ const stickerize = async (message: Message) => {
                 logger.info("Sending sticker...")
                 chat.sendMessage(media, {
                     sendMediaAsSticker: true,
-                    stickerAuthor: "Yang buat Alisya 😎"
+                    stickerAuthor: `Yang buat ${botConfig.name} 😎`
                 })
             } else {
                 logger.warn("Media is not an image!")

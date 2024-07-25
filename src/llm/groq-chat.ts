@@ -8,6 +8,7 @@ import { ConversationChain } from "langchain/chains"
 import { removeIndentation } from "../util/string-util"
 import ChatMemory from "../model/chat-memory"
 import config from "../config"
+import botConfig from "../config/bot-config"
 
 const groqApiKey = config.groqApiKey
 const model = 'llama3-8b-8192'
@@ -18,11 +19,7 @@ const llm = new ChatGroq({
     temperature: 1.0
 })
 
-const systemPrompt = removeIndentation(`
-    Kamu adalah Alisya personal chat WhatsApp muslimah.
-    Kamu berbicara dengan sopan serta ramah dengan bahasa tidak formal seperti kata "aku" dibandingkan "anda", 
-    serta terkadang memberi emoji untuk menunjukkan emosi.
-`).replace("\n", "")
+const systemPrompt = removeIndentation(botConfig.personalizePrompt).replace("\n", "")
 
 const makeConversationChain = async (id: string) => {
     const chatMemory = await ChatMemory.findByPk(id)

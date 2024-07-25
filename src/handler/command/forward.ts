@@ -2,6 +2,7 @@ import { Message, MessageMedia } from "whatsapp-web.js"
 import { parseStackTrace, removeIndentation } from "../../util/string-util"
 import logger from "../../logger/pino"
 import client from "../../worker/client"
+import botConfig from "../../config/bot-config"
 
 const forward = async (message: Message) => {
     try {
@@ -31,7 +32,7 @@ const forward = async (message: Message) => {
             }
 
             const makeMessage = removeIndentation(
-                `Halo aku Alisya personal WhatsApp Chatbot kamu dapat pesan nih dari seseorang:\n
+                `Halo aku ${botConfig.name} personal WhatsApp Chatbot kamu dapat pesan nih dari seseorang:\n
                 ${messageToForward}`)
 
             await client.sendMessage(phoneId, makeMessage, {    

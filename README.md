@@ -31,7 +31,7 @@ A friendly conversational chatbot named Alisya integrated with Large Language Mo
    npm run migrate
    npm run seed
    ```
-5. Start node application,
+5. Start node application (Choose one),
    ```bash
    # Production server
    npm start

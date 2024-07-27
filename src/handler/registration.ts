@@ -7,13 +7,14 @@ import tagAll from "./command/tagall"
 import talk from "./command/talk"
 import forward from "./command/forward"
 import resetMemory from "./command/reset-memory"
+import { disableTakeOver, enableTakeOver } from "./command/takeover"
 
 type MessageCommand = {
     prefix: string;
     callback: (message: Message) => void;
 }
 
-enum CommandKey {
+enum MessageCommandKey {
     help = 'help',
     add = 'add',
     kick = 'kick',
@@ -24,7 +25,12 @@ enum CommandKey {
     resetMemory = 'resetMemory'
 }
 
-const commandRegistration: Record<CommandKey, MessageCommand> = {
+enum MessageCreateCommandKey {
+    takeOver = 'takeOver',
+    disTakeOver = 'disTakeOver'
+}
+
+const messageCommands: Record<MessageCommandKey, MessageCommand> = {
     help: {
         prefix: '!help',
         callback: help
@@ -59,5 +65,24 @@ const commandRegistration: Record<CommandKey, MessageCommand> = {
     }
 }
 
-export default commandRegistration
-export type { MessageCommand, CommandKey }
+const messageCreateCommands: Record<MessageCreateCommandKey, MessageCommand> = {
+    takeOver: {
+        prefix: '!takeover',
+        callback: enableTakeOver
+    },
+    disTakeOver: {
+        prefix: '!distakeover',
+        callback: disableTakeOver
+    }
+}
+
+export {
+    messageCommands,
+    messageCreateCommands
+}
+
+export type { 
+    MessageCommand, 
+    MessageCommandKey,
+    MessageCreateCommandKey
+}

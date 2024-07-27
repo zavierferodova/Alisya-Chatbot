@@ -9,6 +9,7 @@ A friendly conversational chatbot named Alisya integrated with Large Language Mo
 4. Tagging all group participants.
 5. Sending a message or media via bot to someone.
 6. Talking with bot using LLM.
+7. Take over, automatic message response assistant.
 
 ### Setup
 1. Install node modules,
@@ -25,9 +26,10 @@ A friendly conversational chatbot named Alisya integrated with Large Language Mo
    GROQ_API_KEY=<your_groq_api_key>
    DB_NAME=BotDatabase.db
    ```
-4. Perform database migration to store chat conversation,
+4. Perform database migration to store chat conversation and seeding for initialize data,
    ```bash
    npm run migrate
+   npm run seed
    ```
 5. Start node application,
    ```bash

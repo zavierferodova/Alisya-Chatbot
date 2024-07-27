@@ -1,6 +1,6 @@
 import { GroupChat, Message } from "whatsapp-web.js"
 import { responseUserMessage } from "../../llm/groq-chat"
-import commandRegistration from "../registration"
+import { messageCommands } from "../registration"
 import { sha256KeyedHash } from "../../util/crypto-util"
 import config from "../../config"
 import logger from "../../logger/pino"
@@ -23,7 +23,7 @@ const talk = async (message: Message) => {
 
         logger.info("Getting llm response ...")
         const encryptedId = sha256KeyedHash(config.chiperKey, id)
-        const userQuestion = msgx.replace(commandRegistration.talk.prefix, '').trim()
+        const userQuestion = msgx.replace(messageCommands.talk.prefix, '').trim()
         const response = await responseUserMessage(encryptedId, userQuestion)
         logger.info("Success getting llm response!")
         message.reply(response)

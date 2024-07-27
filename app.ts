@@ -1,7 +1,7 @@
 import qrcode from 'qrcode-terminal'
 import client from './src/worker/client'
-import messageHandler from './src/handler'
 import logger from './src/logger/pino'
+import { messageCreateHandler, messageHandler } from './src/handler'
 
 logger.info('Starting the application...')
 
@@ -19,6 +19,8 @@ client.on('ready', () => {
 })
 
 client.on('message', messageHandler)
+
+client.on('message_create', messageCreateHandler)
 
 client.on('disconnected', () => {
     logger.info('Client is disconnected!')

@@ -2,7 +2,7 @@ import { GroupChat, Message } from "whatsapp-web.js"
 import { filterAdminInvoked } from "../../util/command-util"
 import logger from "../../logger/pino"
 import { parseStackTrace } from "../../util/string-util"
-import commandRegistration from "../registration"
+import { messageCommands } from "../registration"
 
 const kickFromGroup = async (message: Message) => {
     try {
@@ -20,7 +20,7 @@ const kickFromGroup = async (message: Message) => {
 
         if (message.mentionedIds.length === 0) {
             logger.warn("No mentioned user to kick!")
-            message.reply(`Silahkan tag orangnya *${commandRegistration.kick.prefix} [@tagOrangnya]*`)
+            message.reply(`Silahkan tag orangnya *${messageCommands.kick.prefix} [@tagOrangnya]*`)
             return
         }
 

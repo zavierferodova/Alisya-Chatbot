@@ -6,20 +6,17 @@ import State from "../model/state"
 const messageHandler = async (message: Message) => {
     const state = await State.findByPk(1)
     
-    if (!state?.takeover) {
+    if (state?.publicFunction && !state?.takeover) {
         Object.values(messageCommands).forEach((command) => {
             commandExecutor(command.prefix, message, command.callback)
         })
-    } else {
+    } else if (state?.takeover) {
         responseTakeOver(message)
     }
 }
 
 const messageCreateHandler = async (message: Message)  => {
-    const { takeOver, disTakeOver } = messageCreateCommands
-    const commands = { takeOver, disTakeOver }
-
-    Object.values(commands).forEach((command) => {
+    Object.values(messageCreateCommands).forEach((command) => {
         commandExecutor(command.prefix, message, command.callback)
     })
 }

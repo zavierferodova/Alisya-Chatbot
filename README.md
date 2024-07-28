@@ -43,7 +43,7 @@ A friendly conversational chatbot named Alisya integrated with Large Language Mo
 8. Enjoyy...
 
 ### Usage
-You can send a `!help` command message to show the list action that bot can do.
+You can send a `!help` command message to show the list action that bot can do. For bot configuration command you can send `!help` command message to your self WhatsApp phone number.
 
 ### Additional Note
 This bot using LLM from [Groq AI](https://groq.com) you can grab your API key from that site and fill it into env file.

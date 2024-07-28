@@ -6,6 +6,7 @@ module.exports = {
     await queryInterface.bulkInsert('States', [{
       id: 1,
       takeover: false,
+      publicFunction: true,
       createdAt: new Date(),
       updatedAt: new Date()
     }])

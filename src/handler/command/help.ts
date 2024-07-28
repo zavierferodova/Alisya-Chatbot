@@ -1,9 +1,11 @@
 import { Message } from "whatsapp-web.js"
-import { removeIndentation } from "../../util/string-util"
-import { messageCommands } from "../registration"
+import { parseStackTrace, removeIndentation } from "../../util/string-util"
+import { messageCommands, messageCreateCommands } from "../registration"
 import botConfig from "../../config/bot-config"
+import logger from "../../logger/pino"
+import client from "../../worker/client"
 
-const help = async (message: Message) => {
+const publicHelp = async (message: Message) => {
     message.reply(removeIndentation(`
         👋 Halo, kenalin aku ${botConfig.name} 👋
         
@@ -41,4 +43,41 @@ const help = async (message: Message) => {
     `))
 }
 
-export default help
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const selfHelp = async (message: Message) => {
+    try {
+        const currentId = message.author
+        const botId = client.info.wid._serialized
+
+        if (currentId == botId) {
+            await message.reply(removeIndentation(`
+                Berikut adalah daftar perintah yang dapat pemilik lakukan :
+
+                ✅ *${messageCreateCommands.help.prefix}*
+                Melihat daftar perintah yang dapat dilakukan.
+
+                ✅ *${messageCreateCommands.takeOver.prefix} [owner_name|optional]*
+                Mengambil alih pesan WhatsApp oleh ${botConfig.name}.
+
+                ✅ *${messageCreateCommands.disTakeOver.prefix}*
+                Mematikan ambil alih pesan WhatsApp oleh ${botConfig.name}.
+
+                ✅ *${messageCreateCommands.publicFunctions.prefix}*
+                Mengaktifkan fungsi public dari ${botConfig.name}.
+
+                ✅ *${messageCreateCommands.disPublicFunctions.prefix}*
+                Mematikan fungsi public dari ${botConfig.name}.
+            `))
+        }
+    } catch(error) {
+        const err = error as Error
+        logger.error({
+            error: parseStackTrace(err.stack),
+        })
+    }
+}
+
+export {
+    publicHelp,
+    selfHelp
+}

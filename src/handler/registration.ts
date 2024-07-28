@@ -1,6 +1,5 @@
 import { Message } from "whatsapp-web.js"
 import addToGroup from "./command/add"
-import help from "./command/help"
 import kickFromGroup from "./command/kick"
 import stickerize from "./command/stickerize"
 import tagAll from "./command/tagall"
@@ -8,6 +7,8 @@ import talk from "./command/talk"
 import forward from "./command/forward"
 import resetMemory from "./command/reset-memory"
 import { disableTakeOver, enableTakeOver } from "./command/takeover"
+import { disablePublicFunctions, enablePublicFunctions } from "./command/public-functions"
+import { publicHelp, selfHelp } from "./command/help"
 
 type MessageCommand = {
     prefix: string;
@@ -26,14 +27,17 @@ enum MessageCommandKey {
 }
 
 enum MessageCreateCommandKey {
+    help = 'help',
     takeOver = 'takeOver',
-    disTakeOver = 'disTakeOver'
+    disTakeOver = 'disTakeOver',
+    publicFunctions = 'publicFunctions',
+    disPublicFunctions = 'disPublicFunctions'
 }
 
 const messageCommands: Record<MessageCommandKey, MessageCommand> = {
     help: {
         prefix: '!help',
-        callback: help
+        callback: publicHelp
     },
     add: {
         prefix: '!add',
@@ -66,6 +70,10 @@ const messageCommands: Record<MessageCommandKey, MessageCommand> = {
 }
 
 const messageCreateCommands: Record<MessageCreateCommandKey, MessageCommand> = {
+    help: {
+        prefix: '!help',
+        callback: selfHelp
+    },
     takeOver: {
         prefix: '!takeover',
         callback: enableTakeOver
@@ -73,6 +81,14 @@ const messageCreateCommands: Record<MessageCreateCommandKey, MessageCommand> = {
     disTakeOver: {
         prefix: '!distakeover',
         callback: disableTakeOver
+    },
+    publicFunctions: {
+        prefix: '!public',
+        callback: enablePublicFunctions
+    },
+    disPublicFunctions: {
+        prefix: '!dispublic',
+        callback: disablePublicFunctions
     }
 }
 

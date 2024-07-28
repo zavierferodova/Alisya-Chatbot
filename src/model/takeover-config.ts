@@ -1,28 +1,22 @@
-import sequelize from "."
 import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize"
+import sequelize from "."
 
-class State extends Model<InferAttributes<State>, InferCreationAttributes<State>> {
+class TakeOverConfig extends Model<InferAttributes<TakeOverConfig>, InferCreationAttributes<TakeOverConfig>> {
   declare id: CreationOptional<string>
-  declare takeover: boolean
-  declare publicFunction: boolean
+  declare ownerName: string | null
   declare updatedAt: CreationOptional<Date>
   declare createdAt: CreationOptional<Date>
 }
 
-State.init({
+TakeOverConfig.init({
   id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER
   },
-  takeover: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false
-  },
-  publicFunction: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
+  ownerName: {
+    type: DataTypes.STRING
   },
   createdAt: {
     allowNull: false,
@@ -34,7 +28,7 @@ State.init({
   }
 }, {
   sequelize,
-  modelName: 'State',
+  modelName: 'TakeOverConfig',
 })
 
-export default State
+export default TakeOverConfig

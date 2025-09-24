@@ -15,6 +15,10 @@ module.exports = {
         type: DataTypes.JSON,
         allowNull: false
       },
+      summary: {
+        type: DataTypes.TEXT,
+        allowNull: false
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false

@@ -1,5 +1,5 @@
 import { GroupChat, Message } from "whatsapp-web.js"
-import { resetChatMemory } from "../../llm/groq-chat"
+import { resetChatMemory } from "../../core/chain"
 import { sha256KeyedHash } from "../../util/crypto-util"
 import config from "../../config"
 import logger from "../../logger/pino"

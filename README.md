@@ -14,7 +14,7 @@ A friendly conversational chatbot named Alisya integrated with Large Language Mo
 ### Setup
 1. Install node modules,
    ```bash
-   npm install
+   pnpm install
    ```
 2. Create `.env` file from `.env.example`,
    ```bash
@@ -23,35 +23,41 @@ A friendly conversational chatbot named Alisya integrated with Large Language Mo
 3. Fill `.env` file,
    ```
    CHIPER_KEY=<your_custom_secret_key>
-   GROQ_API_KEY=<your_groq_api_key>
+   LLM_API_KEY=<your_llm_api_key>
    DB_NAME=BotDatabase.db
    ```
 4. Perform database migration to store chat conversation and seeding for initialize data,
    ```bash
-   npm run migrate
-   npm run seed
+   pnpm run migrate
+   pnpm run seed
    ```
 5. Start node application (Choose one),
    ```bash
    # Production server
-   npm start
+   pnpm start
 
    # Development server
-   npm run dev
+   pnpm run dev
 6. Wait application to start and after QR Code appeared scan it on WhatsApp to login,
 7. After client authenticated you're ready to go,
 8. Enjoyy...
+
+#### Environment Variables
+Make sure to set these in your `.env` file:
+- `CHIPER_KEY`: Your custom secret key for encryption
+- `LLM_API_KEY`: Your LLM API key for LLM functionality
+- `DB_NAME`: Database name (default: BotDatabase.db)
 
 ### Usage
 You can send a `!help` command message to show the list action that bot can do. For bot configuration command you can send `!help` command message to your self WhatsApp phone number.
 
 ### Additional Note
-This bot using LLM from [Groq AI](https://groq.com) you can grab your API key from that site and fill it into env file.
+This bot using LLM from [Google Generative AI](https://generativelanguage.google.com) you can grab your API key from [Google AI Studio](https://makersuite.google.com/app/maker) and fill it into env file.
 
 ### Libraries
-- [whatsapp-web.js](https://groq.com)
+- [whatsapp-web.js](https://wwebjs.dev/)
 - [LangChain.js](https://js.langchain.com)
-- [LangChain Groq](https://www.npmjs.com/package/@langchain/groq)
+- [Google Generative AI](https://aistudio.google.com/)
 - [Sequelize](https://sequelize.org)
 
 ### Credits

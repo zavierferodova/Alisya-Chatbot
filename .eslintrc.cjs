@@ -19,7 +19,6 @@ module.exports = {
                 project: './tsconfig.json'
             },
             rules: {
-                "@typescript-eslint/semi": ["error", "never"]
             }
         },
         {

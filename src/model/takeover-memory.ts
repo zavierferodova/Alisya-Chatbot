@@ -4,6 +4,7 @@ import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, 
 class TakeOverMemory extends Model<InferAttributes<TakeOverMemory>, InferCreationAttributes<TakeOverMemory>> {
   declare id: CreationOptional<string>
   declare history: string
+  declare summary: string
   declare updatedAt: CreationOptional<Date>
   declare createdAt: CreationOptional<Date>
 }
@@ -16,6 +17,10 @@ TakeOverMemory.init({
   },
   history: {
     type: DataTypes.JSON,
+    allowNull: false
+  },
+  summary: {
+    type: DataTypes.TEXT,
     allowNull: false
   },
   createdAt: {

@@ -1,5 +1,5 @@
 import { GroupChat, Message } from "whatsapp-web.js"
-import { responseUserMessage } from "../../llm/groq-chat"
+import { responseUserMessage } from "../../core/chain"
 import { messageCommands } from "../registration"
 import { sha256KeyedHash } from "../../util/crypto-util"
 import config from "../../config"

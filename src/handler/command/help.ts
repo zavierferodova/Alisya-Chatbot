@@ -1,12 +1,13 @@
-import { Message } from "whatsapp-web.js"
-import { parseStackTrace, removeIndentation } from "../../util/string-util"
-import { messageCommands, messageCreateCommands } from "../registration"
-import botConfig from "../../config/bot-config"
-import logger from "../../logger/pino"
-import client from "../../worker/client"
+import { Message } from 'whatsapp-web.js';
+import { parseStackTrace, removeIndentation } from '../../util/string-util';
+import { messageCommands, messageCreateCommands } from '../registration';
+import botConfig from '../../config/bot-config';
+import logger from '../../logger/pino';
+import client from '../../worker/client';
 
 const publicHelp = async (message: Message) => {
-    message.reply(removeIndentation(`
+  message.reply(
+    removeIndentation(`
         👋 Halo, kenalin aku ${botConfig.name} 👋
         
         Personal chatbot sahabat kalian semua 🥳
@@ -40,17 +41,19 @@ const publicHelp = async (message: Message) => {
 
         ✅ *${messageCommands.tagAll.prefix}*
         Melakukan tagging ke seluruh anggota group.
-    `))
-}
+    `),
+  );
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const selfHelp = async (message: Message) => {
-    try {
-        const currentId = message.author
-        const botId = client.info.wid._serialized
+  try {
+    const currentId = message.author;
+    const botId = client.info.wid._serialized;
 
-        if (currentId == botId) {
-            await message.reply(removeIndentation(`
+    if (currentId == botId) {
+      await message.reply(
+        removeIndentation(`
                 Berikut adalah daftar perintah yang dapat pemilik lakukan :
 
                 ✅ *${messageCreateCommands.help.prefix}*
@@ -67,17 +70,15 @@ const selfHelp = async (message: Message) => {
 
                 ✅ *${messageCreateCommands.disPublicFunctions.prefix}*
                 Mematikan fungsi public dari ${botConfig.name}.
-            `))
-        }
-    } catch(error) {
-        const err = error as Error
-        logger.error({
-            error: parseStackTrace(err.stack),
-        })
+            `),
+      );
     }
-}
+  } catch (error) {
+    const err = error as Error;
+    logger.error({
+      error: parseStackTrace(err.stack),
+    });
+  }
+};
 
-export {
-    publicHelp,
-    selfHelp
-}
+export { publicHelp, selfHelp };

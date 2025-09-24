@@ -3,6 +3,7 @@
 A friendly conversational chatbot named Alisya integrated with Large Language Model (llama3-8b-8192) for creating response and using SQLite to store conversation as memory. Using [whatsapp-web.js](https://wwebjs.dev) as interface so this bot can used for everyone using their personal WhatsApp number.
 
 ### Feature List
+
 1. Add number to group chat.
 2. Kick person from group chat.
 3. Make sticker from sent image media.
@@ -12,6 +13,7 @@ A friendly conversational chatbot named Alisya integrated with Large Language Mo
 7. Take over, automatic message response assistant.
 
 ### Setup
+
 1. Install node modules,
    ```bash
    pnpm install
@@ -32,33 +34,42 @@ A friendly conversational chatbot named Alisya integrated with Large Language Mo
    pnpm run seed
    ```
 5. Start node application (Choose one),
+
    ```bash
    # Production server
    pnpm start
 
    # Development server
    pnpm run dev
+   ```
+
 6. Wait application to start and after QR Code appeared scan it on WhatsApp to login,
 7. After client authenticated you're ready to go,
 8. Enjoyy...
 
 #### Environment Variables
+
 Make sure to set these in your `.env` file:
+
 - `CHIPER_KEY`: Your custom secret key for encryption
 - `LLM_API_KEY`: Your LLM API key for LLM functionality
 - `DB_NAME`: Database name (default: BotDatabase.db)
 
 ### Usage
+
 You can send a `!help` command message to show the list action that bot can do. For bot configuration command you can send `!help` command message to your self WhatsApp phone number.
 
 ### Additional Note
+
 This bot using LLM from [Google Generative AI](https://generativelanguage.google.com) you can grab your API key from [Google AI Studio](https://makersuite.google.com/app/maker) and fill it into env file.
 
 ### Libraries
+
 - [whatsapp-web.js](https://wwebjs.dev/)
 - [LangChain.js](https://js.langchain.com)
 - [Google Generative AI](https://aistudio.google.com/)
 - [Sequelize](https://sequelize.org)
 
 ### Credits
+
 Developed by Zavier Ferodova Al Fitroh ✌️

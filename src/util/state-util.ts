@@ -1,25 +1,21 @@
-import State from "../model/state"
+import State from '../model/state';
 
 const getStateConfig = async () => {
-    return await State.findByPk(1)
-}
+  return await State.findByPk(1);
+};
 
 const updateTakeoverState = async (status: boolean) => {
-    const state = await getStateConfig()
-    return await state?.update({
-        takeover: status
-    })   
-}
+  const state = await getStateConfig();
+  return await state?.update({
+    takeover: status,
+  });
+};
 
 const updatePublicFunctionState = async (status: boolean) => {
-    const state = await getStateConfig()
-    return await state?.update({
-        publicFunction: status
-    })
-}
+  const state = await getStateConfig();
+  return await state?.update({
+    publicFunction: status,
+  });
+};
 
-export {
-    getStateConfig,
-    updateTakeoverState,
-    updatePublicFunctionState
-}
+export { getStateConfig, updateTakeoverState, updatePublicFunctionState };

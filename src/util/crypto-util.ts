@@ -1,11 +1,9 @@
-import crypto from 'crypto'
+import crypto from 'crypto';
 
 function sha256KeyedHash(key: string, data: string): string {
-    const hmac = crypto.createHmac('sha256', key)
-    hmac.update(data)
-    return hmac.digest('hex')
+  const hmac = crypto.createHmac('sha256', key);
+  hmac.update(data);
+  return hmac.digest('hex');
 }
 
-export {
-    sha256KeyedHash
-}
+export { sha256KeyedHash };

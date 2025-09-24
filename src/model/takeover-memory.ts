@@ -1,39 +1,51 @@
-import sequelize from "."
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize"
+import sequelize from '.';
+import {
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+} from 'sequelize';
 
-class TakeOverMemory extends Model<InferAttributes<TakeOverMemory>, InferCreationAttributes<TakeOverMemory>> {
-  declare id: CreationOptional<string>
-  declare history: string
-  declare summary: string
-  declare updatedAt: CreationOptional<Date>
-  declare createdAt: CreationOptional<Date>
+class TakeOverMemory extends Model<
+  InferAttributes<TakeOverMemory>,
+  InferCreationAttributes<TakeOverMemory>
+> {
+  declare id: CreationOptional<string>;
+  declare history: string;
+  declare summary: string;
+  declare updatedAt: CreationOptional<Date>;
+  declare createdAt: CreationOptional<Date>;
 }
 
-TakeOverMemory.init({
-  id: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    primaryKey: true
+TakeOverMemory.init(
+  {
+    id: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      primaryKey: true,
+    },
+    history: {
+      type: DataTypes.JSON,
+      allowNull: false,
+    },
+    summary: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
   },
-  history: {
-    type: DataTypes.JSON,
-    allowNull: false
+  {
+    sequelize,
+    modelName: 'TakeOverMemory',
   },
-  summary: {
-    type: DataTypes.TEXT,
-    allowNull: false
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: false
-  },
-  updatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false
-  },
-}, {
-  sequelize,
-  modelName: 'TakeOverMemory',
-})
+);
 
-export default TakeOverMemory
+export default TakeOverMemory;

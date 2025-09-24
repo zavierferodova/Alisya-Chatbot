@@ -1,35 +1,35 @@
-'use strict'
+'use strict';
 
-const { DataTypes } = require('sequelize')
+const { DataTypes } = require('sequelize');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     await queryInterface.createTable('ChatMemories', {
       id: {
         type: DataTypes.STRING,
         allowNull: false,
-        primaryKey: true
+        primaryKey: true,
       },
       history: {
         type: DataTypes.JSON,
-        allowNull: false
+        allowNull: false,
       },
       summary: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       createdAt: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: false,
       },
       updatedAt: {
         type: DataTypes.DATE,
-        allowNull: false
-      }
-    })
+        allowNull: false,
+      },
+    });
   },
-  async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('ChatMemories')
-  }
-}
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('ChatMemories');
+  },
+};

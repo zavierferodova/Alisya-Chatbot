@@ -1,161 +1,93 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChatMessageHistory, ConversationSummaryBufferMemory } from 'langchain/memory';
-import { ChatPromptTemplate, HumanMessagePromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts';
-import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { ConversationChain } from "langchain/chains";
+import { VectorStoreRetrieverMemory } from 'langchain/memory';
+import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { removeIndentation } from "../util/string-util";
-import { llm } from "../llm/genai";
-
-import ChatMemory from "../model/chat-memory";
-import TakeOverMemory from "../model/takeover-memory";
+import { embeddings, llm } from "../llm/genai";
+import { Chroma } from "@langchain/community/vectorstores/chroma";
+import { ConversationChain } from "langchain/chains";
 import botConfig from "../config/bot-config";
+import config from '../config';
 
 const systemPrompt = removeIndentation(botConfig.personalizePrompt).replace("\n", "");
 const systemPromptTakeOver = removeIndentation(botConfig.personalizePromptTakeOver).replace("\n", "");
+
+const chatVectorStore = new Chroma(embeddings, {
+    collectionName: "alisya-chat-memory",
+    url: config.chromaDbUrl,
+});
+
+const takeOverVectorStore = new Chroma(embeddings, {
+    collectionName: "alisya-takeover-memory",
+    url: config.chromaDbUrl,
+});
 
 /**
  * Creates a conversation chain for a standard user chat.
  * It loads history and summary from the database to resume conversations.
  */
 const makeConversationChain = async (id: string) => {
-    const chatMemoryRecord = await ChatMemory.findByPk(id);
-    let chatHistory = new ChatMessageHistory();
-    let summary = "";
-
-    if (chatMemoryRecord) {
-        const history = JSON.parse(chatMemoryRecord.history);
-        chatHistory = new ChatMessageHistory(history.map((message: any) => {
-            return message.type === "ai"
-                ? new AIMessage(message.data.content)
-                : new HumanMessage(message.data.content);
-        }));
-        summary = chatMemoryRecord.summary || "";
-    }
-
-    const memory = new ConversationSummaryBufferMemory({
-        llm,
-        chatHistory,
-        maxTokenLimit: 6000,
+    const memory = new VectorStoreRetrieverMemory({
+        vectorStoreRetriever: chatVectorStore.asRetriever(
+            {
+                k: 10,
+                filter: {
+                    from: id,
+                }
+            }
+        ),
         memoryKey: "chatHistory",
-        returnMessages: true,
-        summaryChatMessageClass: HumanMessage
+        metadata: {
+            from: id,
+        },
     });
-    memory.movingSummaryBuffer = summary; // Load the saved summary
 
     const prompt = ChatPromptTemplate.fromMessages([
-        new SystemMessage(systemPrompt),
-        new MessagesPlaceholder("chatHistory"),
-        HumanMessagePromptTemplate.fromTemplate("{inputText}"),
+        ["system", `${systemPrompt}\n\nBerikut adalah konteks dari percakapan sebelumnya:\n{chatHistory}`],
+        ["human", "{inputText}"]
     ]);
     
     const chain = new ConversationChain({ 
         llm,
         prompt,
         memory,
+        verbose: true,
     });
 
     return { chain, memory };
 };
 
 /**
- * Creates a conversation chain for a "take over" chat scenario.
+ * Creates a conversation chain for a take over chat.
+ * It loads history and summary from the database to resume conversations.
  */
-const makeTakeOverConversationChain = async (id: string, ownerName: string) => {
-    const chatMemoryRecord = await TakeOverMemory.findByPk(id);
-    let chatHistory = new ChatMessageHistory();
-    let summary = "";
-
-    if (chatMemoryRecord) {
-        const history = JSON.parse(chatMemoryRecord.history);
-        chatHistory = new ChatMessageHistory(history.map((message: any) => {
-            return message.type === "ai"
-                ? new AIMessage(message.data.content)
-                : new HumanMessage(message.data.content);
-        }));
-        summary = chatMemoryRecord.summary || "";
-    }
-
-    const memory = new ConversationSummaryBufferMemory({
-        llm,
-        chatHistory,
-        maxTokenLimit: 6000,
+const makeTakeOverChain = async (id: string, ownerName: string) => {
+    const memory = new VectorStoreRetrieverMemory({
+        vectorStoreRetriever: takeOverVectorStore.asRetriever(
+            {
+                k: 10,
+                filter: {
+                    from: id,
+                }
+            }
+        ),
         memoryKey: "chatHistory",
-        returnMessages: true,
-        summaryChatMessageClass: HumanMessage
+        metadata: {
+            from: id,
+        },
     });
-    memory.movingSummaryBuffer = summary; // Load the saved summary
 
     const prompt = ChatPromptTemplate.fromMessages([
-        new SystemMessage(systemPromptTakeOver.replace("{{ownerName}}", ownerName)),
-        new MessagesPlaceholder("chatHistory"),
-        HumanMessagePromptTemplate.fromTemplate("{inputText}"),
+        ["system", `${systemPromptTakeOver.replace("{{ownerName}}", ownerName)}\n\nBerikut adalah konteks dari percakapan sebelumnya:\n{chatHistory}`],
+        ["human", "{inputText}"]
     ]);
     
     const chain = new ConversationChain({ 
         llm,
         prompt,
         memory,
+        verbose: true,
     });
 
     return { chain, memory };
-};
-
-/**
- * Saves the updated message buffer and summary to the database.
- */
-const updateChatMemory = async (id: string, memory: ConversationSummaryBufferMemory): Promise<boolean> => {
-    try {
-        const messageHistory = await memory.chatHistory.getMessages();
-        const summary = memory.movingSummaryBuffer;
-        const messageHistoryDict = messageHistory.map((message) => message.toDict());
-
-        const [chatMemory, created] = await ChatMemory.findOrCreate({ 
-            where: { id },
-            defaults: { 
-                history: JSON.stringify(messageHistoryDict),
-                summary: summary
-            }
-        });
-
-        if (!created) {
-            chatMemory.history = JSON.stringify(messageHistoryDict);
-            chatMemory.summary = summary;
-            await chatMemory.save();
-        }
-        return true;
-    } catch (error) {
-        console.error("Failed to update chat memory:", error);
-        return false;
-    }
-};
-
-/**
- * Saves the state of a "take over" chat.
- */
-const updateTakeOverMemory = async (id: string, memory: ConversationSummaryBufferMemory): Promise<boolean> => {
-    try {
-        const messageHistory = await memory.chatHistory.getMessages();
-        const summary = memory.movingSummaryBuffer;
-        const messageHistoryDict = messageHistory.map((message) => message.toDict());
-
-        const [chatMemory, created] = await TakeOverMemory.findOrCreate({ 
-            where: { id },
-            defaults: { 
-                history: JSON.stringify(messageHistoryDict),
-                summary: summary
-            }
-        });
-
-        if (!created) {
-            chatMemory.history = JSON.stringify(messageHistoryDict);
-            chatMemory.summary = summary;
-            await chatMemory.save();
-        }
-        return true;
-    } catch (error) {
-        console.error("Failed to update take over memory:", error);
-        return false;
-    }
 };
 
 /**
@@ -166,57 +98,60 @@ export const responseUserMessage = async (
     message: string,
     options: { takeOver: boolean, ownerName?: string } = { takeOver: false }
 ): Promise<string> => {
-    let conversationChain: ConversationChain;
-    let chatMemory: ConversationSummaryBufferMemory;
+    let conversationChain;
 
-    if (!options.takeOver) {
-        const { chain, memory } = await makeConversationChain(id);
+    if (options.takeOver) {
+        const { chain } = await makeTakeOverChain(id, options.ownerName || "");
         conversationChain = chain;
-        chatMemory = memory;
     } else {
-        const { chain, memory } = await makeTakeOverConversationChain(id, options.ownerName || "");
+        const { chain } = await makeConversationChain(id);
         conversationChain = chain;
-        chatMemory = memory;
     }
 
-    const chainValue = await conversationChain.invoke({ 
-        inputText: removeIndentation(`Date: ${new Date().toISOString()}\n\n${message}`)
+    const chainValue = await conversationChain.invoke({
+        inputText: removeIndentation(`${message}`),
     });
 
-    if (!options.takeOver) {
-        await updateChatMemory(id, chatMemory);
-    } else {
-        await updateTakeOverMemory(id, chatMemory);
-    }
-
-    return chainValue.response as string;
+    const chainValueString = chainValue.response as string;
+    return chainValueString;
 };
 
 /**
  * Deletes a user's chat history from the database.
  */
 export const resetChatMemory = async (id: string): Promise<boolean> => {
-    const chatMemory = await ChatMemory.findByPk(id);
-    if (chatMemory) {
-        await chatMemory.destroy();
-        return true;
-    }
-    return false;
-};
-
-/**
- * Deletes all "take over" chat histories from the database.
- */
-export const resetAllTakeOverMemory = async (): Promise<boolean> => {
-    await TakeOverMemory.destroy({ where: {} });
+    await chatVectorStore.delete({ filter: { from: id } });
     return true;
 };
 
 /**
- * Checks if a "take over" memory record is empty.
+ * Deletes all "take over" chat histories from the vector store.
+ */
+export const resetAllTakeOverMemory = async (): Promise<boolean> => {
+    try {
+        // 1. Get all documents from the collection
+        const allDocs = await takeOverVectorStore.collection?.get();
+        
+        // 2. If there are documents, delete them by their IDs
+        if (allDocs && allDocs.ids.length > 0) {
+            await takeOverVectorStore.delete({ ids: allDocs.ids });
+        }
+        
+        return true;
+    } catch {
+        return false;
+    }
+};
+
+/**
+ * Checks if a "take over" memory record is empty for a specific ID.
  */
 export const isTakeOverMemoryEmpty = async (id: string): Promise<boolean> => {
-    const chatMemory = await TakeOverMemory.findByPk(id);
-    // An empty history is typically stored as '[]' which has a length of 2.
-    return !chatMemory || chatMemory.history.length <= 2;
+    // Search for just 1 document matching the filter.
+    // If the result array is empty, then no memory exists.
+    const results = await takeOverVectorStore.similaritySearch(" ", 1, { 
+        from: id 
+    });
+    
+    return results.length === 0;
 };

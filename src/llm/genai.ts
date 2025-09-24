@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import config from "../config";
-import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 
 const googleApiKey = config.llmApiKey;
 
@@ -10,3 +9,7 @@ export const llm = new ChatGoogleGenerativeAI({
     temperature: 0.7
 });
 
+export const embeddings = new GoogleGenerativeAIEmbeddings({
+    apiKey: googleApiKey,
+    model: "gemini-embedding-001",
+});

@@ -4,4 +4,4 @@
 node_modules/
 db/
 .env
-BotDatabase/
+chroma/chromadb_data/

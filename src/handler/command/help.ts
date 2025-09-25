@@ -1,7 +1,7 @@
 import { Message } from 'whatsapp-web.js';
 import { parseStackTrace, removeIndentation } from '../../util/string-util';
 import { messageCommands, messageCreateCommands } from '../registration';
-import botConfig from '../../config/bot-config';
+import botConfig from '../../config/personalization';
 import logger from '../../logger/pino';
 import client from '../../worker/client';
 

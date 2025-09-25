@@ -4,7 +4,7 @@ import { removeIndentation } from '../util/string-util';
 import { embeddings, llm } from '../llm/genai';
 import { Chroma } from '@langchain/community/vectorstores/chroma';
 import { ConversationChain } from 'langchain/chains';
-import botConfig from '../config/bot-config';
+import botConfig from '../config/personalization';
 import config from '../config';
 
 const systemPrompt = removeIndentation(botConfig.personalizePrompt).replace('\n', '');
@@ -15,12 +15,12 @@ const systemPromptTakeOver = removeIndentation(botConfig.personalizePromptTakeOv
 
 const chatVectorStore = new Chroma(embeddings, {
   collectionName: 'alisya-chat-memory',
-  url: config.chromaDbUrl,
+  url: config.chromadbUrl,
 });
 
 const takeOverVectorStore = new Chroma(embeddings, {
   collectionName: 'alisya-takeover-memory',
-  url: config.chromaDbUrl,
+  url: config.chromadbUrl,
 });
 
 /**
@@ -30,7 +30,7 @@ const takeOverVectorStore = new Chroma(embeddings, {
 const makeConversationChain = async (id: string) => {
   const memory = new VectorStoreRetrieverMemory({
     vectorStoreRetriever: chatVectorStore.asRetriever({
-      k: 10,
+      k: 8,
       filter: {
         from: id,
       },
@@ -42,10 +42,8 @@ const makeConversationChain = async (id: string) => {
   });
 
   const prompt = ChatPromptTemplate.fromMessages([
-    [
-      'system',
-      `${systemPrompt}\n\nBerikut adalah konteks dari percakapan sebelumnya:\n{chatHistory}`,
-    ],
+    ['system', removeIndentation(systemPrompt)],
+    ['placeholder', '{chatHistory}'],
     ['human', '{inputText}'],
   ]);
 
@@ -53,7 +51,7 @@ const makeConversationChain = async (id: string) => {
     llm,
     prompt,
     memory,
-    verbose: true,
+    verbose: config.devmode,
   });
 
   return { chain, memory };
@@ -66,7 +64,7 @@ const makeConversationChain = async (id: string) => {
 const makeTakeOverChain = async (id: string, ownerName: string) => {
   const memory = new VectorStoreRetrieverMemory({
     vectorStoreRetriever: takeOverVectorStore.asRetriever({
-      k: 10,
+      k: 8,
       filter: {
         from: id,
       },
@@ -78,10 +76,8 @@ const makeTakeOverChain = async (id: string, ownerName: string) => {
   });
 
   const prompt = ChatPromptTemplate.fromMessages([
-    [
-      'system',
-      `${systemPromptTakeOver.replace('{{ownerName}}', ownerName)}\n\nBerikut adalah konteks dari percakapan sebelumnya:\n{chatHistory}`,
-    ],
+    ['system', removeIndentation(systemPromptTakeOver.replace('{{ownerName}}', ownerName))],
+    ['placeholder', '{chatHistory}'],
     ['human', '{inputText}'],
   ]);
 
@@ -89,7 +85,7 @@ const makeTakeOverChain = async (id: string, ownerName: string) => {
     llm,
     prompt,
     memory,
-    verbose: true,
+    verbose: config.devmode,
   });
 
   return { chain, memory };

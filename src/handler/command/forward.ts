@@ -2,7 +2,7 @@ import { Message, MessageMedia } from 'whatsapp-web.js';
 import { parseStackTrace, removeIndentation } from '../../util/string-util';
 import logger from '../../logger/pino';
 import client from '../../worker/client';
-import botConfig from '../../config/bot-config';
+import botConfig from '../../config/personalization';
 
 const forward = async (message: Message) => {
   try {

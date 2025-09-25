@@ -1,7 +1,7 @@
 import { Message, MessageMedia } from 'whatsapp-web.js';
 import logger from '../../logger/pino';
 import { parseStackTrace } from '../../util/string-util';
-import botConfig from '../../config/bot-config';
+import botConfig from '../../config/personalization';
 
 const stickerize = async (message: Message) => {
   try {

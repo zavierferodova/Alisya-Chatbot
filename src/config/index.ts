@@ -2,17 +2,17 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 type ConfigType = {
+  devmode: boolean;
   chiperKey: string;
   llmApiKey: string;
-  chromaDbUrl: string;
-  chromaCollectionName: string;
+  chromadbUrl: string;
 };
 
 const config: ConfigType = {
+  devmode: process.env.DEV_MODE === 'true',
   chiperKey: process.env.CHIPER_KEY!,
   llmApiKey: process.env.LLM_API_KEY!,
-  chromaDbUrl: process.env.CHROMA_DB_URL || 'http://localhost:8000',
-  chromaCollectionName: process.env.CHROMA_COLLECTION_NAME || 'alisya-memory',
+  chromadbUrl: process.env.CHROMA_DB_URL || 'http://localhost:8000',
 };
 
 export default config;

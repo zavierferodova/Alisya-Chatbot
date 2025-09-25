@@ -33,7 +33,12 @@ A friendly conversational chatbot named Alisya integrated with Large Language Mo
    pnpm run migrate
    pnpm run seed
    ```
-5. Start node application (Choose one),
+5. Create chromadb container,
+   ```bash
+   cd chromadb
+   docker-compose up -d
+   ```
+6. Start node application (Choose one),
 
    ```bash
    # Production server
@@ -43,9 +48,9 @@ A friendly conversational chatbot named Alisya integrated with Large Language Mo
    pnpm run dev
    ```
 
-6. Wait application to start and after QR Code appeared scan it on WhatsApp to login,
-7. After client authenticated you're ready to go,
-8. Enjoyy...
+7. Wait application to start and after QR Code appeared scan it on WhatsApp to login,
+8. After client authenticated you're ready to go,
+9. Enjoyy...
 
 #### Environment Variables
 

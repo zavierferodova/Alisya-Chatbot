@@ -3,11 +3,11 @@ module.exports = {
   root: true,
   env: {
     node: true,
-    es6: true,
+    es6: true
   },
   parserOptions: {
     ecmaVersion: 2020,
-    sourceType: 'module',
+    sourceType: 'module'
   },
   overrides: [
     {
@@ -16,14 +16,14 @@ module.exports = {
       extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
       parser: '@typescript-eslint/parser',
       parserOptions: {
-        project: './tsconfig.json',
+        project: './tsconfig.json'
       },
-      rules: {},
+      rules: {}
     },
     {
       files: ['*.js'],
-      extends: 'standard',
-      rules: {},
-    },
-  ],
+      extends: 'eslint:recommended',
+      rules: {}
+    }
+  ]
 };

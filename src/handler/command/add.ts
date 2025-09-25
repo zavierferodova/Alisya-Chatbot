@@ -28,7 +28,7 @@ const addToGroup = async (message: Message) => {
 
     logger.info({
       message: 'Checking phone numbers to add into group!',
-      phones: phoneToAdd,
+      phones: phoneToAdd
     });
 
     for (const phone of phoneToAdd) {
@@ -49,27 +49,27 @@ const addToGroup = async (message: Message) => {
     if (failedToAdd.length > 0) {
       logger.info({
         message: 'List not registered phone numbers!',
-        participants: failedToAdd,
+        participants: failedToAdd
       });
       message.reply(
-        'Nomor berikut tidak terdaftar di WhatsApp: ' + failedToAdd.toString().replace(/,/g, ' '),
+        'Nomor berikut tidak terdaftar di WhatsApp: ' + failedToAdd.toString().replace(/,/g, ' ')
       );
     }
 
     if (alreadyInGroup.length > 0) {
       logger.info({
         message: 'List phone numbers already in group!',
-        participants: alreadyInGroup,
+        participants: alreadyInGroup
       });
       message.reply(
-        'Nomor berikut sudah ada di group: ' + failedToAdd.toString().replace(/,/g, ' '),
+        'Nomor berikut sudah ada di group: ' + failedToAdd.toString().replace(/,/g, ' ')
       );
     }
 
     if (requestToAdd.length > 0) {
       logger.info({
         message: 'Adding participants to group...',
-        participants: requestToAdd,
+        participants: requestToAdd
       });
       await groupChat.addParticipants(requestToAdd);
       logger.info('Success add participants to group!');
@@ -81,7 +81,7 @@ const addToGroup = async (message: Message) => {
     const err = error as Error;
     logger.error({
       message: 'Failed to add participants to group!',
-      error: parseStackTrace(err.stack),
+      error: parseStackTrace(err.stack)
     });
     message.reply('Yah.. sepertinya aku gagal menambahkan anggota ke group 😢');
   }

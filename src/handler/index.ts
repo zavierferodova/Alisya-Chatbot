@@ -24,7 +24,7 @@ const messageCreateHandler = async (message: Message) => {
 const commandExecutor = (
   command: string,
   message: Message,
-  callback: (message: Message) => void,
+  callback: (message: Message) => void
 ) => {
   const msgx = message.body.trim();
   let callbackCalled = false;

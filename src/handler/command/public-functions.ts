@@ -20,7 +20,7 @@ const enablePublicFunctions = async (message: Message) => {
     const err = error as Error;
     logger.error({
       message: 'Failed to activate public functions!',
-      error: parseStackTrace(err.stack),
+      error: parseStackTrace(err.stack)
     });
     message.reply('Gagal mengaktifkan fungsi publik!');
   }
@@ -42,7 +42,7 @@ const disablePublicFunctions = async (message: Message) => {
     const err = error as Error;
     logger.error({
       message: 'Failed to disable public functions!',
-      error: parseStackTrace(err.stack),
+      error: parseStackTrace(err.stack)
     });
     message.reply('Gagal menonaktifkan fungsi publik!');
   }

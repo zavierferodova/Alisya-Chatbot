@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # Main application service
+  app:
+    build: .
+    container_name: alisya-chatbot
+    volumes:
+      - ./db:/app/db
+      - ./.wwebjs_auth:/app/.wwebjs_auth
+      - ./.wwebjs_cache:/app/.wwebjs_cache
+    environment:
+      - DEV_MODE=false
+      - CHIPER_KEY=${CHIPER_KEY}
+      - LLM_API_KEY=${LLM_API_KEY}
+      - DB_NAME=BotDatabase.db
+      - CHROMA_DB_URL=http://chroma:8000
+      - CHROMIUM_PATH=/usr/bin/chromium
+    depends_on:
+      - chroma
+    networks:
+      - alisya-network
+    restart: unless-stopped
+    command: |
+      bash -c 'if [ ! -f "./db/${DB_NAME}" ]; then npm run migrate && npm run seed; fi && npm start'
+
+  # ChromaDB vector database service
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: alisya-chromadb
+    ports:
+      - '8000:8000'
+    volumes:
+      - chromadb_data:/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - PERSIST_DIRECTORY=/chroma
+    networks:
+      - alisya-network
+    restart: unless-stopped
+
+volumes:
+  chromadb_data:
+    driver: local
+
+networks:
+  alisya-network:
+    driver: bridge

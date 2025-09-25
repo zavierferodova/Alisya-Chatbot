@@ -1,4 +1,1 @@
-onlyBuiltDependencies:
-  - protobufjs
-  - puppeteer
-  - sqlite3
+onlyBuiltDependencies: -protobufjs - puppeteer - sqlite3;

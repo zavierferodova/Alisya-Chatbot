@@ -7,10 +7,10 @@ export const llm = new ChatGoogleGenerativeAI({
   apiKey: googleApiKey,
   model: 'gemini-2.0-flash',
   temperature: 0.5,
-  convertSystemMessageToHumanContent: true,
+  convertSystemMessageToHumanContent: true
 });
 
 export const embeddings = new GoogleGenerativeAIEmbeddings({
   apiKey: googleApiKey,
-  model: 'gemini-embedding-001',
+  model: 'gemini-embedding-001'
 });

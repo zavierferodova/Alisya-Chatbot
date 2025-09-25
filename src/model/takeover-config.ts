@@ -3,7 +3,7 @@ import {
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
-  Model,
+  Model
 } from 'sequelize';
 import sequelize from '.';
 
@@ -23,24 +23,24 @@ TakeOverConfig.init(
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER
     },
     ownerName: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING
     },
     createdAt: {
       allowNull: false,
-      type: DataTypes.DATE,
+      type: DataTypes.DATE
     },
     updatedAt: {
       allowNull: false,
-      type: DataTypes.DATE,
-    },
+      type: DataTypes.DATE
+    }
   },
   {
     sequelize,
-    modelName: 'TakeOverConfig',
-  },
+    modelName: 'TakeOverConfig'
+  }
 );
 
 export default TakeOverConfig;

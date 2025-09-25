@@ -4,7 +4,7 @@ import {
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
-  Model,
+  Model
 } from 'sequelize';
 
 class State extends Model<InferAttributes<State>, InferCreationAttributes<State>> {
@@ -21,29 +21,29 @@ State.init(
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER
     },
     takeover: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: false
     },
     publicFunction: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: false
     },
     createdAt: {
       allowNull: false,
-      type: DataTypes.DATE,
+      type: DataTypes.DATE
     },
     updatedAt: {
       allowNull: false,
-      type: DataTypes.DATE,
-    },
+      type: DataTypes.DATE
+    }
   },
   {
     sequelize,
-    modelName: 'State',
-  },
+    modelName: 'State'
+  }
 );
 
 export default State;

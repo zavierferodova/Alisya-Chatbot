@@ -33,7 +33,7 @@ const resetMemory = async (message: Message) => {
     const err = error as Error;
     logger.error({
       message: 'Failed to reset chat memory!',
-      error: err.message,
+      error: err.message
     });
     message.reply('Maaf ya sepertinya sistemku sedang mengalami gangguan 😢');
   }

@@ -34,11 +34,11 @@ const forward = async (message: Message) => {
 
       const makeMessage = removeIndentation(
         `Halo aku ${botConfig.name} personal WhatsApp Chatbot kamu dapat pesan nih dari seseorang:\n
-                ${messageToForward}`,
+                ${messageToForward}`
       );
 
       await client.sendMessage(phoneId, makeMessage, {
-        media: media,
+        media: media
       });
       await message.reply('Pesan berhasil diteruskan!');
 
@@ -51,7 +51,7 @@ const forward = async (message: Message) => {
     const err = error as Error;
     logger.error({
       message: 'Failed to forward message!',
-      error: parseStackTrace(err.stack),
+      error: parseStackTrace(err.stack)
     });
     message.reply('Yah.. sepertinya aku gagal meneruskan pesan 😢');
   }

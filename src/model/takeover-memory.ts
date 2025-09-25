@@ -4,7 +4,7 @@ import {
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
-  Model,
+  Model
 } from 'sequelize';
 
 class TakeOverMemory extends Model<
@@ -23,29 +23,29 @@ TakeOverMemory.init(
     id: {
       type: DataTypes.STRING,
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
     },
     history: {
       type: DataTypes.JSON,
-      allowNull: false,
+      allowNull: false
     },
     summary: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: false
     },
     createdAt: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: false
     },
     updatedAt: {
       type: DataTypes.DATE,
-      allowNull: false,
-    },
+      allowNull: false
+    }
   },
   {
     sequelize,
-    modelName: 'TakeOverMemory',
-  },
+    modelName: 'TakeOverMemory'
+  }
 );
 
 export default TakeOverMemory;

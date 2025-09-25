@@ -6,6 +6,7 @@ type ConfigType = {
   chiperKey: string;
   llmApiKey: string;
   chromadbUrl: string;
+  chromiumPath: string | undefined;
 };
 
 const config: ConfigType = {
@@ -13,6 +14,7 @@ const config: ConfigType = {
   chiperKey: process.env.CHIPER_KEY!,
   llmApiKey: process.env.LLM_API_KEY!,
   chromadbUrl: process.env.CHROMA_DB_URL || 'http://localhost:8000',
+  chromiumPath: process.env.CHROMIUM_PATH
 };
 
 export default config;

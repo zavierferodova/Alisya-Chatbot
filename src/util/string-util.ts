@@ -35,7 +35,7 @@ function parseStackTrace(trace?: string): StackTrace | null {
         functionName,
         filePath,
         line: parseInt(line, 10),
-        column: parseInt(column, 10),
+        column: parseInt(column, 10)
       };
       frames.push(frame);
     }

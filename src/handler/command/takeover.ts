@@ -6,7 +6,7 @@ import { sha256KeyedHash } from '../../util/crypto-util';
 import {
   isTakeOverMemoryEmpty,
   resetAllTakeOverMemory,
-  responseUserMessage,
+  responseUserMessage
 } from '../../core/chain';
 import config from '../../config';
 import { changeTakeOverState, getTakeOverConfig, setTakeOverOwner } from '../../util/takeover-util';
@@ -36,7 +36,7 @@ const enableTakeOver = async (message: Message) => {
     const err = error as Error;
     logger.error({
       message: 'Failed to disable take over!',
-      error: parseStackTrace(err.stack),
+      error: parseStackTrace(err.stack)
     });
     message.reply('Gagal mengambil alih WhatsApp!');
   }
@@ -66,7 +66,7 @@ const disableTakeOver = async (message: Message) => {
     const err = error as Error;
     logger.error({
       message: 'Failed to disable take over!',
-      error: parseStackTrace(err.stack),
+      error: parseStackTrace(err.stack)
     });
     message.reply('Gagal menonaktifkan ambil alih WhatsApp!');
   }
@@ -93,18 +93,18 @@ const responseTakeOver = async (message: Message) => {
 
     if (await isTakeOverMemoryEmpty(encryptedId)) {
       await message.reply(
-        'Maaf, sepertinya pemilik akun ini sedang sibuk. Berikut kamu dapat berbicara dengan asistennya.',
+        'Maaf, sepertinya pemilik akun ini sedang sibuk. Berikut kamu dapat berbicara dengan asistennya.'
       );
       const response = await responseUserMessage(encryptedId, 'Siapa kamu ?', {
         takeOver: true,
-        ownerName: ownerName,
+        ownerName: ownerName
       });
       await client.sendMessage(id, response);
     } else {
       const userQuestion = msgx.trim();
       const response = await responseUserMessage(encryptedId, userQuestion, {
         takeOver: true,
-        ownerName: ownerName,
+        ownerName: ownerName
       });
       await message.reply(response);
     }
@@ -114,7 +114,7 @@ const responseTakeOver = async (message: Message) => {
     const err = error as Error;
     logger.error({
       message: 'Failed to get llm response!',
-      error: parseStackTrace(err.stack),
+      error: parseStackTrace(err.stack)
     });
   }
 };

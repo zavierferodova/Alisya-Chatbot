@@ -10,17 +10,17 @@ import config from '../config';
 const systemPrompt = removeIndentation(botConfig.personalizePrompt).replace('\n', '');
 const systemPromptTakeOver = removeIndentation(botConfig.personalizePromptTakeOver).replace(
   '\n',
-  '',
+  ''
 );
 
 const chatVectorStore = new Chroma(embeddings, {
   collectionName: 'alisya-chat-memory',
-  url: config.chromadbUrl,
+  url: config.chromadbUrl
 });
 
 const takeOverVectorStore = new Chroma(embeddings, {
   collectionName: 'alisya-takeover-memory',
-  url: config.chromadbUrl,
+  url: config.chromadbUrl
 });
 
 /**
@@ -32,26 +32,26 @@ const makeConversationChain = async (id: string) => {
     vectorStoreRetriever: chatVectorStore.asRetriever({
       k: 8,
       filter: {
-        from: id,
-      },
+        from: id
+      }
     }),
     memoryKey: 'chatHistory',
     metadata: {
-      from: id,
-    },
+      from: id
+    }
   });
 
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', removeIndentation(systemPrompt)],
     ['placeholder', '{chatHistory}'],
-    ['human', '{inputText}'],
+    ['human', '{inputText}']
   ]);
 
   const chain = new ConversationChain({
     llm,
     prompt,
     memory,
-    verbose: config.devmode,
+    verbose: config.devmode
   });
 
   return { chain, memory };
@@ -66,26 +66,26 @@ const makeTakeOverChain = async (id: string, ownerName: string) => {
     vectorStoreRetriever: takeOverVectorStore.asRetriever({
       k: 8,
       filter: {
-        from: id,
-      },
+        from: id
+      }
     }),
     memoryKey: 'chatHistory',
     metadata: {
-      from: id,
-    },
+      from: id
+    }
   });
 
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', removeIndentation(systemPromptTakeOver.replace('{{ownerName}}', ownerName))],
     ['placeholder', '{chatHistory}'],
-    ['human', '{inputText}'],
+    ['human', '{inputText}']
   ]);
 
   const chain = new ConversationChain({
     llm,
     prompt,
     memory,
-    verbose: config.devmode,
+    verbose: config.devmode
   });
 
   return { chain, memory };
@@ -97,7 +97,7 @@ const makeTakeOverChain = async (id: string, ownerName: string) => {
 export const responseUserMessage = async (
   id: string,
   message: string,
-  options: { takeOver: boolean; ownerName?: string } = { takeOver: false },
+  options: { takeOver: boolean; ownerName?: string } = { takeOver: false }
 ): Promise<string> => {
   let conversationChain;
 
@@ -110,7 +110,7 @@ export const responseUserMessage = async (
   }
 
   const chainValue = await conversationChain.invoke({
-    inputText: removeIndentation(`${message}`),
+    inputText: removeIndentation(`${message}`)
   });
 
   const chainValueString = chainValue.response as string;
@@ -151,7 +151,7 @@ export const isTakeOverMemoryEmpty = async (id: string): Promise<boolean> => {
   // Search for just 1 document matching the filter.
   // If the result array is empty, then no memory exists.
   const results = await takeOverVectorStore.similaritySearch(' ', 1, {
-    from: id,
+    from: id
   });
 
   return results.length === 0;

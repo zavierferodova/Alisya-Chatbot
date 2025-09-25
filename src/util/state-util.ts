@@ -7,14 +7,14 @@ const getStateConfig = async () => {
 const updateTakeoverState = async (status: boolean) => {
   const state = await getStateConfig();
   return await state?.update({
-    takeover: status,
+    takeover: status
   });
 };
 
 const updatePublicFunctionState = async (status: boolean) => {
   const state = await getStateConfig();
   return await state?.update({
-    publicFunction: status,
+    publicFunction: status
   });
 };
 

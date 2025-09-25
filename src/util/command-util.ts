@@ -9,8 +9,8 @@ const filterGroupInvoked = (
   chat: Chat,
   message: Message,
   options: CheckGroupInvocationOptions = {
-    autoReply: true,
-  },
+    autoReply: true
+  }
 ) => {
   if (!chat.isGroup && options.autoReply) {
     message.reply('Maaf, command ini hanya bisa digunakan di group chat 😢');
@@ -23,8 +23,8 @@ const filterAdminInvoked = (
   chat: Chat,
   message: Message,
   options: CheckGroupInvocationOptions = {
-    autoReply: true,
-  },
+    autoReply: true
+  }
 ) => {
   const groupNotInvoked = filterGroupInvoked(chat, message);
 

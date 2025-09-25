@@ -23,7 +23,7 @@ enum MessageCommandKey {
   forward = 'forward',
   stickerize = 'stickerize',
   talk = 'talk',
-  resetMemory = 'resetMemory',
+  resetMemory = 'resetMemory'
 }
 
 enum MessageCreateCommandKey {
@@ -31,65 +31,65 @@ enum MessageCreateCommandKey {
   takeOver = 'takeOver',
   disTakeOver = 'disTakeOver',
   publicFunctions = 'publicFunctions',
-  disPublicFunctions = 'disPublicFunctions',
+  disPublicFunctions = 'disPublicFunctions'
 }
 
 const messageCommands: Record<MessageCommandKey, MessageCommand> = {
   help: {
     prefix: '!help',
-    callback: publicHelp,
+    callback: publicHelp
   },
   add: {
     prefix: '!add',
-    callback: addToGroup,
+    callback: addToGroup
   },
   kick: {
     prefix: '!kick',
-    callback: kickFromGroup,
+    callback: kickFromGroup
   },
   tagAll: {
     prefix: '!tagsemua',
-    callback: tagAll,
+    callback: tagAll
   },
   forward: {
     prefix: '!forward',
-    callback: forward,
+    callback: forward
   },
   stickerize: {
     prefix: '!stickerize',
-    callback: stickerize,
+    callback: stickerize
   },
   talk: {
     prefix: '!talk',
-    callback: talk,
+    callback: talk
   },
   resetMemory: {
     prefix: '!resetmemory',
-    callback: resetMemory,
-  },
+    callback: resetMemory
+  }
 };
 
 const messageCreateCommands: Record<MessageCreateCommandKey, MessageCommand> = {
   help: {
     prefix: '!help',
-    callback: selfHelp,
+    callback: selfHelp
   },
   takeOver: {
     prefix: '!takeover',
-    callback: enableTakeOver,
+    callback: enableTakeOver
   },
   disTakeOver: {
     prefix: '!distakeover',
-    callback: disableTakeOver,
+    callback: disableTakeOver
   },
   publicFunctions: {
     prefix: '!public',
-    callback: enablePublicFunctions,
+    callback: enablePublicFunctions
   },
   disPublicFunctions: {
     prefix: '!dispublic',
-    callback: disablePublicFunctions,
-  },
+    callback: disablePublicFunctions
+  }
 };
 
 export { messageCommands, messageCreateCommands };

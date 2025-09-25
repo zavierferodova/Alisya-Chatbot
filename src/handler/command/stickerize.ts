@@ -16,7 +16,7 @@ const stickerize = async (message: Message) => {
         logger.info('Sending sticker...');
         chat.sendMessage(media, {
           sendMediaAsSticker: true,
-          stickerAuthor: `Yang buat ${botConfig.name} 😎`,
+          stickerAuthor: `Yang buat ${botConfig.name} 😎`
         });
       } else {
         logger.warn('Media is not an image!');
@@ -27,7 +27,7 @@ const stickerize = async (message: Message) => {
     const err = error as Error;
     logger.error({
       message: 'Failed to create sticker!',
-      error: parseStackTrace(err.stack),
+      error: parseStackTrace(err.stack)
     });
     message.reply('Yah.. sepertinya aku gagal membuat sticker 😢');
   }

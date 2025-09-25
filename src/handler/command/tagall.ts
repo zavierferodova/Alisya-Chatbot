@@ -30,7 +30,7 @@ const tagAll = async (message: Message) => {
 
     logger.info({
       message: 'Tagging all participants in group ...',
-      participants: participants,
+      participants: participants
     });
     await chat.sendMessage(text, { mentions: mentions.map((contact) => contact.id._serialized) });
     logger.info('Success tagging all participants in group!');
@@ -38,7 +38,7 @@ const tagAll = async (message: Message) => {
     const err = error as Error;
     logger.error({
       message: 'Failed to tag all participants in group!',
-      error: parseStackTrace(err.stack),
+      error: parseStackTrace(err.stack)
     });
     message.reply('Yah.. sepertinya aku gagal melakukan tag 😢');
   }

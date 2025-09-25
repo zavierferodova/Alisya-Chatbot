@@ -37,7 +37,7 @@ const botConfig = {
       Numbered list : 1. text
       Quote : > text
       Inline code → \`text\`
-    `,
+    `
 };
 
 export default botConfig;

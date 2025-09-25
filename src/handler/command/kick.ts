@@ -26,7 +26,7 @@ const kickFromGroup = async (message: Message) => {
 
     logger.info({
       message: 'Kicking participants from group!',
-      participants: message.mentionedIds,
+      participants: message.mentionedIds
     });
     await groupChat.removeParticipants(message.mentionedIds.map((id) => id.toString()));
     logger.info('Success kicking participants from group!');
@@ -35,7 +35,7 @@ const kickFromGroup = async (message: Message) => {
     const err = error as Error;
     logger.error({
       message: 'Failed to kick participants from group!',
-      error: parseStackTrace(err.stack),
+      error: parseStackTrace(err.stack)
     });
     message.reply('Yah.. sepertinya aku gagal mengeluarkan anggota dari group 😢');
   }

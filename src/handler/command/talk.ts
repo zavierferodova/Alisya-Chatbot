@@ -31,7 +31,7 @@ const talk = async (message: Message) => {
     const err = error as Error;
     logger.error({
       message: 'Failed to get llm response!',
-      error: parseStackTrace(err.stack),
+      error: parseStackTrace(err.stack)
     });
     message.reply('Maaf ya sepertinya sistemku sedang mengalami gangguan 😢');
   }

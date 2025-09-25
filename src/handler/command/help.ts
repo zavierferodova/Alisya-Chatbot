@@ -41,7 +41,7 @@ const publicHelp = async (message: Message) => {
 
         ✅ *${messageCommands.tagAll.prefix}*
         Melakukan tagging ke seluruh anggota group.
-    `),
+    `)
   );
 };
 
@@ -70,13 +70,13 @@ const selfHelp = async (message: Message) => {
 
                 ✅ *${messageCreateCommands.disPublicFunctions.prefix}*
                 Mematikan fungsi public dari ${botConfig.name}.
-            `),
+            `)
       );
     }
   } catch (error) {
     const err = error as Error;
     logger.error({
-      error: parseStackTrace(err.stack),
+      error: parseStackTrace(err.stack)
     });
   }
 };

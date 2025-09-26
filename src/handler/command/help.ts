@@ -59,6 +59,9 @@ const selfHelp = async (message: Message) => {
                 ✅ *${messageCreateCommands.help.prefix}*
                 Melihat daftar perintah yang dapat dilakukan.
 
+                ✅ *${messageCreateCommands.status.prefix}*
+                Melihat status ${botConfig.name}.
+
                 ✅ *${messageCreateCommands.takeOver.prefix} [owner_name|optional]*
                 Mengambil alih pesan WhatsApp oleh ${botConfig.name}.
 

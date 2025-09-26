@@ -9,6 +9,7 @@ import resetMemory from './command/reset-memory';
 import { disableTakeOver, enableTakeOver } from './command/takeover';
 import { disablePublicFunctions, enablePublicFunctions } from './command/public-functions';
 import { publicHelp, selfHelp } from './command/help';
+import { botStatus } from './command/status';
 
 type MessageCommand = {
   prefix: string;
@@ -31,7 +32,8 @@ enum MessageCreateCommandKey {
   takeOver = 'takeOver',
   disTakeOver = 'disTakeOver',
   publicFunctions = 'publicFunctions',
-  disPublicFunctions = 'disPublicFunctions'
+  disPublicFunctions = 'disPublicFunctions',
+  status = 'status'
 }
 
 const messageCommands: Record<MessageCommandKey, MessageCommand> = {
@@ -73,6 +75,10 @@ const messageCreateCommands: Record<MessageCreateCommandKey, MessageCommand> = {
   help: {
     prefix: '!help',
     callback: selfHelp
+  },
+  status: {
+    prefix: '!status',
+    callback: botStatus
   },
   takeOver: {
     prefix: '!takeover',

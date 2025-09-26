@@ -5,8 +5,10 @@ import State from '../model/state';
 
 const messageHandler = async (message: Message) => {
   const state = await State.findByPk(1);
+  const chat = await message.getChat();
+  const isGroup = chat.isGroup;
 
-  if (state?.publicFunction && !state?.takeover) {
+  if (state?.publicFunction && (!state?.takeover || isGroup)) {
     Object.values(messageCommands).forEach((command) => {
       commandExecutor(command.prefix, message, command.callback);
     });

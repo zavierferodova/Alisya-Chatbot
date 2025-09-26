@@ -1,11 +1,11 @@
 import { VectorStoreRetrieverMemory } from 'langchain/memory';
-import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { removeIndentation } from '../util/string-util';
 import { embeddings, llm } from '../llm/genai';
 import { Chroma } from '@langchain/community/vectorstores/chroma';
-import { ConversationChain } from 'langchain/chains';
 import botConfig from '../config/personalization';
 import config from '../config';
+import { HumanMessage, SystemMessage } from '@langchain/core/messages';
+import logger from '../logger/pino';
 
 const systemPrompt = removeIndentation(botConfig.personalizePrompt).replace('\n', '');
 const systemPromptTakeOver = removeIndentation(botConfig.personalizePromptTakeOver).replace(
@@ -23,11 +23,7 @@ const takeOverVectorStore = new Chroma(embeddings, {
   url: config.chromadbUrl
 });
 
-/**
- * Creates a conversation chain for a standard user chat.
- * It loads history and summary from the database to resume conversations.
- */
-const makeConversationChain = async (id: string) => {
+const getConversationMemory = async (id: string) => {
   const memory = new VectorStoreRetrieverMemory({
     vectorStoreRetriever: chatVectorStore.asRetriever({
       k: 8,
@@ -35,33 +31,15 @@ const makeConversationChain = async (id: string) => {
         from: id
       }
     }),
-    memoryKey: 'chatHistory',
     metadata: {
       from: id
     }
   });
 
-  const prompt = ChatPromptTemplate.fromMessages([
-    ['system', removeIndentation(systemPrompt)],
-    ['placeholder', '{chatHistory}'],
-    ['human', '{inputText}']
-  ]);
-
-  const chain = new ConversationChain({
-    llm,
-    prompt,
-    memory,
-    verbose: config.devmode
-  });
-
-  return { chain, memory };
+  return memory;
 };
 
-/**
- * Creates a conversation chain for a take over chat.
- * It loads history and summary from the database to resume conversations.
- */
-const makeTakeOverChain = async (id: string, ownerName: string) => {
+const getTakeOverMemory = async (id: string) => {
   const memory = new VectorStoreRetrieverMemory({
     vectorStoreRetriever: takeOverVectorStore.asRetriever({
       k: 8,
@@ -69,52 +47,90 @@ const makeTakeOverChain = async (id: string, ownerName: string) => {
         from: id
       }
     }),
-    memoryKey: 'chatHistory',
     metadata: {
       from: id
     }
   });
 
-  const prompt = ChatPromptTemplate.fromMessages([
-    ['system', removeIndentation(systemPromptTakeOver.replace('{{ownerName}}', ownerName))],
-    ['placeholder', '{chatHistory}'],
-    ['human', '{inputText}']
-  ]);
+  return memory;
+};
 
-  const chain = new ConversationChain({
-    llm,
-    prompt,
-    memory,
-    verbose: config.devmode
-  });
-
-  return { chain, memory };
+type ResponseUserMessageParams = {
+  id: string;
+  message: string;
+  image?: string;
+  options: { takeOver: boolean; ownerName?: string };
 };
 
 /**
  * Main function to handle an incoming user message and get a response.
  */
-export const responseUserMessage = async (
-  id: string,
-  message: string,
-  options: { takeOver: boolean; ownerName?: string } = { takeOver: false }
-): Promise<string> => {
-  let conversationChain;
+export const responseUserMessage = async ({
+  id,
+  message,
+  image,
+  options
+}: ResponseUserMessageParams): Promise<string> => {
+  let memory: VectorStoreRetrieverMemory;
 
   if (options.takeOver) {
-    const { chain } = await makeTakeOverChain(id, options.ownerName || '');
-    conversationChain = chain;
+    memory = await getTakeOverMemory(id);
   } else {
-    const { chain } = await makeConversationChain(id);
-    conversationChain = chain;
+    memory = await getConversationMemory(id);
   }
 
-  const chainValue = await conversationChain.invoke({
-    inputText: removeIndentation(`${message}`)
+  const memoryVariables = await memory.loadMemoryVariables({
+    input: message
   });
+  const chatMemory = memoryVariables.memory ? memoryVariables.memory : '';
+  const systemMessage = options.takeOver
+    ? removeIndentation(systemPromptTakeOver.replace('{ownerName}', options.ownerName || '')) +
+      '\n' +
+      chatMemory
+    : removeIndentation(systemPrompt) + '\n' + chatMemory;
 
-  const chainValueString = chainValue.response as string;
-  return chainValueString;
+  const messages = [
+    new SystemMessage(systemMessage),
+    new HumanMessage({
+      content: image
+        ? [
+            {
+              type: 'text',
+              text: removeIndentation(`${message}`)
+            },
+            {
+              type: 'image_url',
+              image_url: image
+            }
+          ]
+        : [
+            {
+              type: 'text',
+              text: removeIndentation(`${message}`)
+            }
+          ]
+    })
+  ];
+
+  const response = await llm.invoke(messages);
+  const responseString = response.text;
+  await memory.saveContext(
+    {
+      input: message + (image ? ` 1 image attached` : '')
+    },
+    {
+      output: responseString
+    }
+  );
+
+  if (config.devmode) {
+    logger.info({
+      memory: chatMemory,
+      response: responseString
+    });
+  }
+
+  return responseString;
 };
 
 /**

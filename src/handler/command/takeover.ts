@@ -95,16 +95,24 @@ const responseTakeOver = async (message: Message) => {
       await message.reply(
         'Maaf, sepertinya pemilik akun ini sedang sibuk. Berikut kamu dapat berbicara dengan asistennya.'
       );
-      const response = await responseUserMessage(encryptedId, 'Siapa kamu ?', {
-        takeOver: true,
-        ownerName: ownerName
+      const response = await responseUserMessage({
+        id: encryptedId,
+        message: 'Siapa kamu ?',
+        options: {
+          takeOver: true,
+          ownerName: ownerName
+        }
       });
       await client.sendMessage(id, response);
     } else {
       const userQuestion = msgx.trim();
-      const response = await responseUserMessage(encryptedId, userQuestion, {
-        takeOver: true,
-        ownerName: ownerName
+      const response = await responseUserMessage({
+        id: encryptedId,
+        message: userQuestion,
+        options: {
+          takeOver: true,
+          ownerName: ownerName
+        }
       });
       await message.reply(response);
     }
@@ -116,6 +124,7 @@ const responseTakeOver = async (message: Message) => {
       message: 'Failed to get llm response!',
       error: parseStackTrace(err.stack)
     });
+    message.reply('Maaf ya sepertinya sistemku sedang mengalami gangguan 😢');
   }
 };
 

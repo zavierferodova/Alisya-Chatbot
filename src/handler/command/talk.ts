@@ -1,4 +1,4 @@
-import { GroupChat, Message } from 'whatsapp-web.js';
+import { GroupChat, Message, MessageMedia } from 'whatsapp-web.js';
 import { responseUserMessage } from '../../core/chain';
 import { messageCommands } from '../registration';
 import { sha256KeyedHash } from '../../util/crypto-util';
@@ -24,7 +24,23 @@ const talk = async (message: Message) => {
     logger.info('Getting llm response ...');
     const encryptedId = sha256KeyedHash(config.chiperKey, id);
     const userQuestion = msgx.replace(messageCommands.talk.prefix, '').trim();
-    const response = await responseUserMessage(encryptedId, userQuestion);
+    let base64Image: string | undefined;
+
+    if (message.hasMedia) {
+      const media: MessageMedia = await message.downloadMedia();
+      if (media.mimetype.startsWith('image/')) {
+        base64Image = `data:${media.mimetype};base64,${media.data}`;
+      }
+    }
+
+    const response = await responseUserMessage({
+      id: encryptedId,
+      message: userQuestion,
+      image: base64Image,
+      options: {
+        takeOver: false
+      }
+    });
     logger.info('Success getting llm response!');
     message.reply(response);
   } catch (error) {

@@ -41,7 +41,6 @@ services:
 
 volumes:
   chromadb_data:
-    driver: local
 
 networks:
   alisya-network:
